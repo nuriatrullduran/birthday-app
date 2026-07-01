@@ -1,0 +1,1306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="theme-color" content="#ffffff">
+    <title>Birthdays</title>
+    <link rel="manifest" href="manifest.json">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        :root {
+            --navy: #1e3a5f;
+            --navy-light: #2a4d7a;
+            --family: #7c5cbf;
+            --uni: #e8a838;
+            --school: #5aab7a;
+            --lux: #5ba4cf;
+            --indy: #cf5b5b;
+            --other: #8e8e93;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', system-ui, sans-serif;
+            background: #f2f2f7;
+            color: #1c1c1e;
+            min-height: 100vh;
+            max-width: 430px;
+            margin: 0 auto;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            display: block;
+            height: env(safe-area-inset-top, 47px);
+            min-height: 47px;
+            background: #ffffff;
+        }
+
+        .status-bar {
+            position: fixed;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 430px;
+            height: 47px;
+            background: #ffffff;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            padding: 0 24px 8px;
+            z-index: 1000;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .status-bar .time {
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+
+        .status-bar .icons {
+            display: flex;
+            gap: 5px;
+            align-items: center;
+            font-size: 0.75rem;
+        }
+
+        .header {
+            background: #ffffff;
+            padding: 0 20px 14px;
+            border-bottom: 0.5px solid #e5e5ea;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            color: var(--navy);
+        }
+
+        /* Calendar */
+        .calendar-section {
+            background: #ffffff;
+            margin: 12px;
+            border-radius: 14px;
+            padding: 16px 10px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+        }
+
+        .calendar-nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 14px;
+            padding: 0 6px;
+        }
+
+        .calendar-nav button {
+            background: none;
+            border: none;
+            font-size: 1.1rem;
+            color: var(--navy);
+            cursor: pointer;
+            padding: 6px 10px;
+            border-radius: 8px;
+            font-weight: 500;
+        }
+
+        .calendar-nav button:active {
+            background: #f2f2f7;
+        }
+
+        .calendar-nav .month-year {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #1c1c1e;
+        }
+
+        .calendar-weekdays {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            text-align: center;
+            margin-bottom: 6px;
+            border-bottom: 0.5px solid #f2f2f7;
+            padding-bottom: 8px;
+        }
+
+        .calendar-weekdays span {
+            font-size: 0.65rem;
+            font-weight: 600;
+            color: #8e8e93;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .calendar-days {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 2px;
+        }
+
+        .calendar-day {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 5px 0 4px;
+            min-height: 54px;
+            border-radius: 10px;
+            cursor: pointer;
+            position: relative;
+            transition: background 0.1s;
+        }
+
+        .calendar-day:active {
+            background: #f2f2f7;
+        }
+
+        .calendar-day .day-number {
+            font-size: 0.7rem;
+            font-weight: 400;
+            color: #3a3a3c;
+            margin-bottom: 4px;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .calendar-day.today .day-number {
+            font-weight: 600;
+            background: var(--navy);
+            color: #ffffff;
+        }
+
+        .calendar-day.other-month .day-number {
+            color: #d1d1d6;
+        }
+
+        .calendar-day .avatars-stack {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .calendar-day .mini-avatar {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.45rem;
+            font-weight: 700;
+            color: #ffffff;
+            border: 1.5px solid #ffffff;
+        }
+
+        .calendar-day .mini-avatar + .mini-avatar {
+            margin-left: -7px;
+        }
+
+        .calendar-day .age-label {
+            font-size: 0.45rem;
+            color: #8e8e93;
+            margin-top: 1px;
+            font-weight: 500;
+        }
+
+        /* FAB */
+        .fab {
+            position: fixed;
+            bottom: 40px;
+            right: calc(50% - 195px);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--navy);
+            color: white;
+            border: none;
+            font-size: 1.5rem;
+            font-weight: 300;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 20px rgba(30, 58, 95, 0.3);
+            z-index: 200;
+        }
+
+        @media (max-width: 430px) {
+            .fab {
+                right: 24px;
+            }
+        }
+
+        .fab:active {
+            transform: scale(0.92);
+        }
+
+        /* Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.4);
+            z-index: 300;
+            align-items: flex-end;
+            justify-content: center;
+            backdrop-filter: blur(2px);
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: #f2f2f7;
+            border-radius: 14px 14px 0 0;
+            width: 100%;
+            max-width: 430px;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding-bottom: 34px;
+        }
+
+        .modal-handle {
+            width: 36px;
+            height: 5px;
+            background: #c7c7cc;
+            border-radius: 3px;
+            margin: 10px auto 0;
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px;
+        }
+
+        .modal-header .cancel {
+            color: var(--navy-light);
+            font-size: 0.9rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .modal-header h2 {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .modal-header .save {
+            color: var(--navy);
+            font-size: 0.9rem;
+            font-weight: 600;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .form-section {
+            background: #ffffff;
+            margin: 0 20px;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 16px;
+        }
+
+        .form-row {
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            border-bottom: 0.5px solid #e5e5ea;
+        }
+
+        .form-row:last-child {
+            border-bottom: none;
+        }
+
+        .form-row label {
+            font-size: 0.9rem;
+            width: 60px;
+            flex-shrink: 0;
+        }
+
+        .form-row input {
+            flex: 1;
+            border: none;
+            font-size: 0.9rem;
+            font-family: inherit;
+            outline: none;
+            background: transparent;
+            color: #1c1c1e;
+        }
+
+        .form-row input::placeholder {
+            color: #c7c7cc;
+        }
+
+        .type-selector {
+            display: flex;
+            gap: 8px;
+            flex: 1;
+        }
+
+        .type-option {
+            flex: 1;
+            padding: 8px 6px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 0.75rem;
+            font-weight: 500;
+            cursor: pointer;
+            border: 1.5px solid #e5e5ea;
+            color: #8e8e93;
+            transition: all 0.2s;
+        }
+
+        .type-option.selected {
+            background: var(--navy);
+            color: #ffffff;
+            border-color: transparent;
+        }
+
+        .group-display {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            font-size: 0.9rem;
+            color: #1c1c1e;
+        }
+
+        .group-display .group-color-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .group-display .group-text {
+            flex: 1;
+        }
+
+        .group-display .chevron {
+            color: #c7c7cc;
+            font-size: 1rem;
+        }
+
+        /* iOS Picker */
+        .picker-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.4);
+            z-index: 400;
+            align-items: flex-end;
+            justify-content: center;
+            backdrop-filter: blur(2px);
+        }
+
+        .picker-overlay.active {
+            display: flex;
+        }
+
+        .picker {
+            background: #f2f2f7;
+            border-radius: 14px 14px 0 0;
+            width: 100%;
+            max-width: 430px;
+            padding-bottom: env(safe-area-inset-bottom, 20px);
+        }
+
+        .picker-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 20px;
+            border-bottom: 0.5px solid #e5e5ea;
+            background: #ffffff;
+            border-radius: 14px 14px 0 0;
+        }
+
+        .picker-header button {
+            background: none;
+            border: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--navy);
+            cursor: pointer;
+        }
+
+        .picker-header span {
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .picker-options {
+            background: #ffffff;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .picker-option {
+            padding: 11px 20px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 0.5px solid #f2f2f7;
+        }
+
+        .picker-option:active {
+            background: #f2f2f7;
+        }
+
+        .picker-option.selected {
+            color: var(--navy);
+            font-weight: 600;
+        }
+
+        .picker-option .check {
+            margin-left: auto;
+            color: var(--navy);
+            font-weight: 700;
+            opacity: 0;
+            font-size: 0.85rem;
+        }
+
+        .picker-option.selected .check {
+            opacity: 1;
+        }
+
+        .picker-option .option-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        /* Day detail overlay */
+        .day-detail-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.4);
+            z-index: 350;
+            align-items: flex-end;
+            justify-content: center;
+            backdrop-filter: blur(2px);
+        }
+
+        .day-detail-overlay.active {
+            display: flex;
+        }
+
+        .day-detail {
+            background: #f2f2f7;
+            border-radius: 14px 14px 0 0;
+            width: 100%;
+            max-width: 430px;
+            padding-bottom: env(safe-area-inset-bottom, 20px);
+        }
+
+        .day-detail-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 20px;
+            background: #ffffff;
+            border-radius: 14px 14px 0 0;
+            border-bottom: 0.5px solid #e5e5ea;
+        }
+
+        .day-detail-header h3 {
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        .day-detail-header button {
+            background: none;
+            border: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--navy);
+            cursor: pointer;
+        }
+
+        .day-detail-list {
+            padding: 12px 20px;
+        }
+
+        .day-detail-card {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 14px 16px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            cursor: pointer;
+        }
+
+        .day-detail-card:active {
+            background: #f9f9f9;
+        }
+
+        .day-detail-card .avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #ffffff;
+        }
+
+        .day-detail-card .info {
+            flex: 1;
+        }
+
+        .day-detail-card .name {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .day-detail-card .detail {
+            font-size: 0.75rem;
+            color: #8e8e93;
+            margin-top: 2px;
+        }
+
+        .day-detail-card .age-badge {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--navy);
+        }
+
+        /* Date display */
+        .date-display {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+        }
+
+        .date-display .date-text {
+            font-size: 0.9rem;
+            color: #1c1c1e;
+        }
+
+        .date-display .date-text.placeholder {
+            color: #c7c7cc;
+        }
+
+        .date-hidden {
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+            pointer-events: none;
+        }
+
+        /* Custom date picker */
+        .date-picker-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.4);
+            z-index: 400;
+            align-items: flex-end;
+            justify-content: center;
+            backdrop-filter: blur(2px);
+        }
+
+        .date-picker-overlay.active {
+            display: flex;
+        }
+
+        .date-picker {
+            background: #f2f2f7;
+            border-radius: 14px 14px 0 0;
+            width: 100%;
+            max-width: 430px;
+            padding-bottom: env(safe-area-inset-bottom, 20px);
+        }
+
+        .date-picker-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 20px;
+            border-bottom: 0.5px solid #e5e5ea;
+            background: #ffffff;
+            border-radius: 14px 14px 0 0;
+        }
+
+        .date-picker-header button {
+            background: none;
+            border: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--navy);
+            cursor: pointer;
+        }
+
+        .date-picker-header span {
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .date-picker-wheels {
+            display: flex;
+            background: #ffffff;
+            padding: 8px 0;
+            height: 180px;
+            overflow: hidden;
+        }
+
+        .date-wheel {
+            flex: 1;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            scroll-snap-type: y mandatory;
+            text-align: center;
+        }
+
+        .date-wheel::-webkit-scrollbar {
+            display: none;
+        }
+
+        .date-wheel .wheel-padding {
+            height: 72px;
+        }
+
+        .date-wheel-item {
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            color: #8e8e93;
+            scroll-snap-align: center;
+            cursor: pointer;
+            transition: all 0.1s;
+        }
+
+        .date-wheel-item.active {
+            color: #1c1c1e;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .date-picker-indicator {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 36px;
+            transform: translateY(-50%);
+            border-top: 0.5px solid #e5e5ea;
+            border-bottom: 0.5px solid #e5e5ea;
+            pointer-events: none;
+        }
+
+        .date-picker-wheels-container {
+            position: relative;
+        }
+
+        .btn-delete-section {
+            background: #ffffff;
+            margin: 0 20px;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .btn-delete {
+            width: 100%;
+            padding: 14px;
+            background: none;
+            border: none;
+            color: #ff3b30;
+            font-size: 0.9rem;
+            font-family: inherit;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .btn-delete:active {
+            background: #f2f2f7;
+        }
+
+        body::after {
+            content: '';
+            display: block;
+            height: 90px;
+        }
+    </style>
+</head>
+<body>
+    <div class="status-bar">
+        <span class="time" id="status-time">9:41</span>
+        <span class="icons">
+            <svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><path d="M1 4.5C1 3.67 1.67 3 2.5 3h1C4.33 3 5 3.67 5 4.5v5c0 .83-.67 1.5-1.5 1.5h-1C1.67 11 1 10.33 1 9.5v-5zm5-2C6 1.67 6.67 1 7.5 1h1C9.33 1 10 1.67 10 2.5v7c0 .83-.67 1.5-1.5 1.5h-1C6.67 11 6 10.33 6 9.5v-7zm5 1c0-.83.67-1.5 1.5-1.5h1c.83 0 1.5.67 1.5 1.5v6c0 .83-.67 1.5-1.5 1.5h-1c-.83 0-1.5-.67-1.5-1.5v-6z"/></svg>
+            <svg width="15" height="12" viewBox="0 0 15 12" fill="currentColor"><path d="M7.5 3C5.57 3 3.8 3.73 2.5 4.94L1 3.44C2.67 1.89 4.96 1 7.5 1s4.83.89 6.5 2.44l-1.5 1.5C11.2 3.73 9.43 3 7.5 3zm-3 4l1.5 1.5C6.6 8.18 7.03 8 7.5 8s.9.18 1.5.5L10.5 7C9.63 6.37 8.6 6 7.5 6s-2.13.37-3 1zm3 3l1.5-1.5c-.4-.32-.93-.5-1.5-.5s-1.1.18-1.5.5L7.5 10z"/></svg>
+            <svg width="25" height="12" viewBox="0 0 25 12" fill="currentColor"><rect x="0" y="1" width="22" height="10" rx="2" ry="2" stroke="currentColor" fill="none" stroke-width="1"/><rect x="1.5" y="2.5" width="17" height="7" rx="1" fill="currentColor"/><rect x="23" y="4" width="2" height="4" rx="0.5" fill="currentColor"/></svg>
+        </span>
+    </div>
+
+    <div class="header">
+        <h1>Birthdays</h1>
+    </div>
+
+    <!-- Calendar -->
+    <div class="calendar-section">
+        <div class="calendar-nav">
+            <button id="prev-month">‹</button>
+            <span class="month-year" id="month-year"></span>
+            <button id="next-month">›</button>
+        </div>
+        <div class="calendar-weekdays">
+            <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
+        </div>
+        <div class="calendar-days" id="calendar-days"></div>
+    </div>
+
+    <!-- FAB -->
+    <button class="fab" id="fab-add">+</button>
+
+    <!-- Modal -->
+    <div class="modal-overlay" id="modal-overlay">
+        <div class="modal">
+            <div class="modal-handle"></div>
+            <div class="modal-header">
+                <button class="cancel" id="btn-cancel">Cancel</button>
+                <h2 id="modal-title">New Event</h2>
+                <button class="save" id="btn-save">Save</button>
+            </div>
+            <div class="form-section">
+                <div class="form-row">
+                    <label>Name</label>
+                    <input type="text" id="input-name" placeholder="Friend's name">
+                </div>
+                <div class="form-row">
+                    <label>Date</label>
+                    <div class="date-display" id="date-display">
+                        <span class="date-text placeholder" id="date-text">dd/mm/yyyy</span>
+                    </div>
+                    <input type="date" class="date-hidden" id="input-date">
+                </div>
+                <div class="form-row">
+                    <label>Type</label>
+                    <div class="type-selector">
+                        <div class="type-option selected" data-value="birthday">Birthday</div>
+                        <div class="type-option" data-value="sant">Sant</div>
+                    </div>
+                </div>
+                <div class="form-row" id="group-row">
+                    <label>Group</label>
+                    <div class="group-display" id="group-display">
+                        <div class="group-color-dot" id="group-dot" style="background:var(--family)"></div>
+                        <span class="group-text" id="group-text">Family</span>
+                        <span class="chevron">›</span>
+                    </div>
+                </div>
+            </div>
+            <div class="btn-delete-section" id="delete-section" style="display:none">
+                <button class="btn-delete" id="btn-delete">Delete Event</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Date Picker -->
+    <div class="date-picker-overlay" id="date-picker-overlay">
+        <div class="date-picker">
+            <div class="date-picker-header">
+                <button id="date-picker-cancel">Cancel</button>
+                <span>Date</span>
+                <button id="date-picker-done">Done</button>
+            </div>
+            <div class="date-picker-wheels-container">
+                <div class="date-picker-wheels">
+                    <div class="date-wheel" id="wheel-day"></div>
+                    <div class="date-wheel" id="wheel-month"></div>
+                    <div class="date-wheel" id="wheel-year"></div>
+                </div>
+                <div class="date-picker-indicator"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Day Detail -->
+    <div class="day-detail-overlay" id="day-detail-overlay">
+        <div class="day-detail">
+            <div class="day-detail-header">
+                <h3 id="day-detail-title"></h3>
+                <button id="day-detail-close">Done</button>
+            </div>
+            <div class="day-detail-list" id="day-detail-list"></div>
+        </div>
+    </div>
+
+    <!-- Group Picker -->
+    <div class="picker-overlay" id="picker-overlay">
+        <div class="picker">
+            <div class="picker-header">
+                <button id="picker-cancel">Cancel</button>
+                <span>Group</span>
+                <button id="picker-done">Done</button>
+            </div>
+            <div class="picker-options" id="picker-options">
+                <div class="picker-option selected" data-value="family">
+                    <div class="option-dot" style="background:var(--family)"></div>
+                    Family
+                    <span class="check">✓</span>
+                </div>
+                <div class="picker-option" data-value="uni">
+                    <div class="option-dot" style="background:var(--uni)"></div>
+                    Uni
+                    <span class="check">✓</span>
+                </div>
+                <div class="picker-option" data-value="school">
+                    <div class="option-dot" style="background:var(--school)"></div>
+                    School
+                    <span class="check">✓</span>
+                </div>
+                <div class="picker-option" data-value="lux">
+                    <div class="option-dot" style="background:var(--lux)"></div>
+                    Lux
+                    <span class="check">✓</span>
+                </div>
+                <div class="picker-option" data-value="indy">
+                    <div class="option-dot" style="background:var(--indy)"></div>
+                    Indy
+                    <span class="check">✓</span>
+                </div>
+                <div class="picker-option" data-value="other">
+                    <div class="option-dot" style="background:var(--other)"></div>
+                    Other
+                    <span class="check">✓</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let friends = JSON.parse(localStorage.getItem('birthday-friends') || '[]');
+        let currentMonth = new Date().getMonth();
+        let currentYear = new Date().getFullYear();
+        let editingId = null;
+        let selectedType = 'birthday';
+        let selectedGroup = 'family';
+
+        const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+            'July', 'August', 'September', 'October', 'November', 'December'];
+
+        const groupColors = { family: 'var(--family)', uni: 'var(--uni)', school: 'var(--school)', lux: 'var(--lux)', indy: 'var(--indy)', other: 'var(--other)' };
+        const groupNames = { family: 'Family', uni: 'Uni', school: 'School', lux: 'Lux', indy: 'Indy', other: 'Other' };
+
+        function save() {
+            localStorage.setItem('birthday-friends', JSON.stringify(friends));
+        }
+
+        function capitalizeName(name) {
+            return name.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ');
+        }
+
+        function getInitials(name) {
+            return name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
+        }
+
+        function getAge(dateStr, month, day) {
+            const birthDate = new Date(dateStr + 'T00:00:00');
+            const birthYear = birthDate.getFullYear();
+            let ageYear = currentYear;
+            if (currentMonth < month - 1 || (currentMonth === month - 1 && day > new Date().getDate())) {
+                ageYear = currentYear;
+            }
+            return ageYear - birthYear;
+        }
+
+        function updateStatusTime() {
+            const now = new Date();
+            document.getElementById('status-time').textContent =
+                now.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', hour12: false });
+        }
+        updateStatusTime();
+        setInterval(updateStatusTime, 60000);
+
+        // Type selector in modal
+        document.querySelectorAll('.type-option').forEach(opt => {
+            opt.addEventListener('click', () => {
+                document.querySelectorAll('.type-option').forEach(o => o.classList.remove('selected'));
+                opt.classList.add('selected');
+                selectedType = opt.dataset.value;
+            });
+        });
+
+        // Date display
+        function formatDateDisplay(dateStr) {
+            if (!dateStr) return null;
+            const parts = dateStr.split('-');
+            return `${parts[2]}/${parts[1]}/${parts[0]}`;
+        }
+
+        const shortMonths = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        let pickedDay = 1, pickedMonth = 1, pickedYear = 2000;
+
+        function buildWheel(container, items, selected) {
+            container.innerHTML = '<div class="wheel-padding"></div>';
+            items.forEach((item, i) => {
+                const el = document.createElement('div');
+                el.className = 'date-wheel-item' + (item.value === selected ? ' active' : '');
+                el.textContent = item.label;
+                el.dataset.value = item.value;
+                container.appendChild(el);
+            });
+            container.innerHTML += '<div class="wheel-padding"></div>';
+
+            const activeEl = container.querySelector('.active');
+            if (activeEl) {
+                setTimeout(() => {
+                    container.scrollTop = activeEl.offsetTop - container.offsetTop - 72;
+                }, 10);
+            }
+
+            container.addEventListener('scroll', () => {
+                const center = container.scrollTop + 72 + 18;
+                const items = container.querySelectorAll('.date-wheel-item');
+                let closest = null, closestDist = Infinity;
+                items.forEach(el => {
+                    const dist = Math.abs(el.offsetTop - container.offsetTop - container.scrollTop - 72);
+                    if (dist < closestDist) { closestDist = dist; closest = el; }
+                });
+                items.forEach(el => el.classList.remove('active'));
+                if (closest) closest.classList.add('active');
+            });
+        }
+
+        function openDatePicker() {
+            const dateVal = document.getElementById('input-date').value;
+            if (dateVal) {
+                const parts = dateVal.split('-');
+                pickedYear = parseInt(parts[0]);
+                pickedMonth = parseInt(parts[1]);
+                pickedDay = parseInt(parts[2]);
+            } else {
+                const now = new Date();
+                pickedDay = now.getDate();
+                pickedMonth = now.getMonth() + 1;
+                pickedYear = now.getFullYear();
+            }
+
+            const days = Array.from({length: 31}, (_, i) => ({ value: i + 1, label: String(i + 1) }));
+            const months = shortMonths.map((m, i) => ({ value: i + 1, label: m }));
+            const thisYear = new Date().getFullYear();
+            const years = Array.from({length: 80}, (_, i) => ({ value: thisYear - i, label: String(thisYear - i) }));
+
+            buildWheel(document.getElementById('wheel-day'), days, pickedDay);
+            buildWheel(document.getElementById('wheel-month'), months, pickedMonth);
+            buildWheel(document.getElementById('wheel-year'), years, pickedYear);
+
+            document.getElementById('date-picker-overlay').classList.add('active');
+        }
+
+        document.getElementById('date-display').addEventListener('click', openDatePicker);
+
+        document.getElementById('date-picker-done').addEventListener('click', () => {
+            const dayEl = document.querySelector('#wheel-day .date-wheel-item.active');
+            const monthEl = document.querySelector('#wheel-month .date-wheel-item.active');
+            const yearEl = document.querySelector('#wheel-year .date-wheel-item.active');
+
+            if (dayEl && monthEl && yearEl) {
+                pickedDay = parseInt(dayEl.dataset.value);
+                pickedMonth = parseInt(monthEl.dataset.value);
+                pickedYear = parseInt(yearEl.dataset.value);
+
+                const dd = String(pickedDay).padStart(2, '0');
+                const mm = String(pickedMonth).padStart(2, '0');
+                document.getElementById('input-date').value = `${pickedYear}-${mm}-${dd}`;
+
+                const text = document.getElementById('date-text');
+                text.textContent = `${dd}/${mm}/${pickedYear}`;
+                text.classList.remove('placeholder');
+            }
+            document.getElementById('date-picker-overlay').classList.remove('active');
+        });
+
+        document.getElementById('date-picker-cancel').addEventListener('click', () => {
+            document.getElementById('date-picker-overlay').classList.remove('active');
+        });
+
+        document.getElementById('date-picker-overlay').addEventListener('click', (e) => {
+            if (e.target === e.currentTarget) {
+                document.getElementById('date-picker-overlay').classList.remove('active');
+            }
+        });
+
+        // Group picker
+        document.getElementById('group-display').addEventListener('click', () => {
+            document.querySelectorAll('.picker-option').forEach(o => {
+                o.classList.toggle('selected', o.dataset.value === selectedGroup);
+            });
+            document.getElementById('picker-overlay').classList.add('active');
+        });
+
+        document.querySelectorAll('.picker-option').forEach(opt => {
+            opt.addEventListener('click', () => {
+                document.querySelectorAll('.picker-option').forEach(o => o.classList.remove('selected'));
+                opt.classList.add('selected');
+            });
+        });
+
+        document.getElementById('picker-done').addEventListener('click', () => {
+            const selected = document.querySelector('.picker-option.selected');
+            if (selected) {
+                selectedGroup = selected.dataset.value;
+                document.getElementById('group-text').textContent = groupNames[selectedGroup];
+                document.getElementById('group-dot').style.background = groupColors[selectedGroup];
+            }
+            document.getElementById('picker-overlay').classList.remove('active');
+        });
+
+        document.getElementById('picker-cancel').addEventListener('click', () => {
+            document.getElementById('picker-overlay').classList.remove('active');
+        });
+
+        document.getElementById('picker-overlay').addEventListener('click', (e) => {
+            if (e.target === e.currentTarget) {
+                document.getElementById('picker-overlay').classList.remove('active');
+            }
+        });
+
+        // Calendar
+        function renderCalendar() {
+            document.getElementById('month-year').textContent = `${monthNames[currentMonth]} ${currentYear}`;
+
+            const firstDay = new Date(currentYear, currentMonth, 1);
+            const lastDay = new Date(currentYear, currentMonth + 1, 0);
+            let startDay = firstDay.getDay() - 1;
+            if (startDay < 0) startDay = 6;
+
+            const today = new Date();
+            const container = document.getElementById('calendar-days');
+            container.innerHTML = '';
+
+            for (let i = 0; i < startDay; i++) {
+                container.innerHTML += '<div class="calendar-day other-month"></div>';
+            }
+
+            for (let day = 1; day <= lastDay.getDate(); day++) {
+                const isToday = day === today.getDate() && currentMonth === today.getMonth() && currentYear === today.getFullYear();
+                const eventsOnDay = friends.filter(f => {
+                    const d = new Date(f.date + 'T00:00:00');
+                    return d.getDate() === day && d.getMonth() === currentMonth;
+                });
+
+                let classes = 'calendar-day';
+                if (isToday) classes += ' today';
+
+                let inner = `<span class="day-number">${day}</span>`;
+
+                if (eventsOnDay.length > 0) {
+                    inner += '<div class="avatars-stack">';
+                    const show = eventsOnDay.slice(0, 3);
+                    show.forEach(f => {
+                        inner += `<div class="mini-avatar" style="background:var(--${f.group})">${getInitials(f.name)}</div>`;
+                    });
+                    inner += '</div>';
+
+                    if (eventsOnDay.length === 1) {
+                        const f = eventsOnDay[0];
+                        if (f.type === 'birthday') {
+                            const birthYear = new Date(f.date + 'T00:00:00').getFullYear();
+                            const turningAge = currentYear - birthYear;
+                            if (turningAge > 0 && turningAge < 120) {
+                                inner += `<span class="age-label">Turning ${turningAge}</span>`;
+                            }
+                        }
+                    }
+                }
+
+                container.innerHTML += `<div class="${classes}" data-day="${day}">${inner}</div>`;
+            }
+
+            document.querySelectorAll('.calendar-day[data-day]').forEach(el => {
+                el.addEventListener('click', () => {
+                    const day = parseInt(el.dataset.day);
+                    const eventsOnDay = friends.filter(f => {
+                        const d = new Date(f.date + 'T00:00:00');
+                        return d.getDate() === day && d.getMonth() === currentMonth;
+                    });
+                    if (eventsOnDay.length > 0) {
+                        openDayDetail(day, eventsOnDay);
+                    }
+                });
+            });
+        }
+
+        // Day detail
+        function openDayDetail(day, events) {
+            document.getElementById('day-detail-title').textContent = `${day} ${monthNames[currentMonth]}`;
+            const list = document.getElementById('day-detail-list');
+            list.innerHTML = events.map(f => {
+                const typeLabel = f.type === 'sant' ? 'Sant' : 'Birthday';
+                let ageHtml = '';
+                if (f.type === 'birthday') {
+                    const birthYear = new Date(f.date + 'T00:00:00').getFullYear();
+                    const turningAge = currentYear - birthYear;
+                    if (turningAge > 0 && turningAge < 120) {
+                        ageHtml = `<span class="age-badge">Turning ${turningAge}</span>`;
+                    }
+                }
+                return `
+                    <div class="day-detail-card" onclick="document.getElementById('day-detail-overlay').classList.remove('active'); editFriend('${f.id}')">
+                        <div class="avatar" style="background:var(--${f.group})">${getInitials(f.name)}</div>
+                        <div class="info">
+                            <div class="name">${f.name}</div>
+                            <div class="detail">${typeLabel} · ${groupNames[f.group]}</div>
+                        </div>
+                        ${ageHtml}
+                    </div>
+                `;
+            }).join('');
+            document.getElementById('day-detail-overlay').classList.add('active');
+        }
+
+        document.getElementById('day-detail-close').addEventListener('click', () => {
+            document.getElementById('day-detail-overlay').classList.remove('active');
+        });
+
+        document.getElementById('day-detail-overlay').addEventListener('click', (e) => {
+            if (e.target === e.currentTarget) {
+                document.getElementById('day-detail-overlay').classList.remove('active');
+            }
+        });
+
+        // Modal
+        function openModal(friend = null) {
+            editingId = friend ? friend.id : null;
+            document.getElementById('modal-title').textContent = friend ? 'Edit' : 'New Event';
+            document.getElementById('input-name').value = friend ? friend.name : '';
+            document.getElementById('input-date').value = friend ? friend.date : '';
+            const dateText = document.getElementById('date-text');
+            if (friend && friend.date) {
+                dateText.textContent = formatDateDisplay(friend.date);
+                dateText.classList.remove('placeholder');
+            } else {
+                dateText.textContent = 'dd/mm/yyyy';
+                dateText.classList.add('placeholder');
+            }
+
+            document.getElementById('delete-section').style.display = friend ? 'block' : 'none';
+
+            selectedType = friend ? friend.type : 'birthday';
+            document.querySelectorAll('.type-option').forEach(o => {
+                o.classList.toggle('selected', o.dataset.value === selectedType);
+            });
+
+            selectedGroup = friend ? friend.group : 'family';
+            document.getElementById('group-text').textContent = groupNames[selectedGroup];
+            document.getElementById('group-dot').style.background = groupColors[selectedGroup];
+
+            document.getElementById('modal-overlay').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('modal-overlay').classList.remove('active');
+            editingId = null;
+        }
+
+        function editFriend(id) {
+            const friend = friends.find(f => f.id === id);
+            if (friend) openModal(friend);
+        }
+
+        document.getElementById('fab-add').addEventListener('click', () => openModal());
+        document.getElementById('btn-cancel').addEventListener('click', closeModal);
+        document.getElementById('modal-overlay').addEventListener('click', (e) => {
+            if (e.target === e.currentTarget) closeModal();
+        });
+
+        document.getElementById('btn-save').addEventListener('click', () => {
+            const rawName = document.getElementById('input-name').value.trim();
+            const date = document.getElementById('input-date').value;
+            const type = selectedType;
+            const group = selectedGroup;
+
+            let valid = true;
+            const nameInput = document.getElementById('input-name');
+            const dateText = document.getElementById('date-text');
+
+            nameInput.style.border = '';
+            dateText.style.color = '';
+
+            if (!rawName) {
+                nameInput.style.border = '1px solid #ff3b30';
+                nameInput.style.borderRadius = '6px';
+                valid = false;
+            }
+            if (!date) {
+                dateText.style.color = '#ff3b30';
+                valid = false;
+            }
+
+            if (!valid) return;
+
+            const name = capitalizeName(rawName);
+
+            if (editingId) {
+                const idx = friends.findIndex(f => f.id === editingId);
+                if (idx >= 0) friends[idx] = { ...friends[idx], name, date, type, group };
+            } else {
+                friends.push({ id: Date.now().toString(), name, date, type, group });
+            }
+
+            save();
+            closeModal();
+            renderCalendar();
+        });
+
+        document.getElementById('btn-delete').addEventListener('click', () => {
+            if (editingId) {
+                friends = friends.filter(f => f.id !== editingId);
+                save();
+                closeModal();
+                renderCalendar();
+            }
+        });
+
+        document.getElementById('prev-month').addEventListener('click', () => {
+            currentMonth--;
+            if (currentMonth < 0) { currentMonth = 11; currentYear--; }
+            renderCalendar();
+        });
+
+        document.getElementById('next-month').addEventListener('click', () => {
+            currentMonth++;
+            if (currentMonth > 11) { currentMonth = 0; currentYear++; }
+            renderCalendar();
+        });
+
+        renderCalendar();
+    </script>
+</body>
+</html>
