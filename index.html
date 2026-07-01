@@ -29,7 +29,7 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', system-ui, sans-serif;
-            background: #f2f2f7;
+            background: #ffffff;
             color: #1c1c1e;
             min-height: 100vh;
             max-width: 430px;
@@ -45,43 +45,266 @@
             background: #ffffff;
         }
 
-        .header {
-            background: #ffffff;
-            padding: 0 20px 14px;
-            border-bottom: 0.5px solid #e5e5ea;
+
+        /* Year view */
+        .year-view {
+            padding: 20px 16px;
+            min-height: 100vh;
         }
 
-        .header h1 {
-            font-size: 2rem;
+        .year-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            padding: 0 4px;
+        }
+
+        .year-title {
+            font-size: 1.3rem;
             font-weight: 800;
-            letter-spacing: -0.5px;
             color: var(--navy);
         }
 
+        .months-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .month-card {
+            background: #f8f8fa;
+            border-radius: 12px;
+            padding: 16px 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: background 0.1s;
+        }
+
+        .month-card:active {
+            background: #e5e5ea;
+        }
+
+        .month-card .month-name {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #1c1c1e;
+        }
+
+
+        .month-card.current {
+            border: 1.5px solid var(--navy);
+        }
+
         /* Calendar */
+        .calendar-view {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: #ffffff;
+            z-index: 100;
+            flex-direction: column;
+            padding-top: env(safe-area-inset-top, 16px);
+        }
+
+        .calendar-view.active {
+            display: flex;
+        }
+
         .calendar-section {
             background: #ffffff;
-            margin: 12px;
-            border-radius: 14px;
-            padding: 16px 10px;
-            box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+            margin: 0;
+            border-radius: 0;
+            padding: 8px 14px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
         }
 
         .calendar-nav {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 14px;
-            padding: 0 6px;
+            margin-bottom: 12px;
+            padding: 0 10px;
         }
 
-        .calendar-nav button {
+        .nav-list-btn {
             background: none;
             border: none;
             font-size: 1.1rem;
             color: var(--navy);
             cursor: pointer;
             padding: 6px 10px;
+            border-radius: 8px;
+        }
+
+        .nav-list-btn:active {
+            background: #f2f2f7;
+        }
+
+        /* All events screen */
+        .all-events-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: #ffffff;
+            z-index: 350;
+            flex-direction: column;
+            padding-top: env(safe-area-inset-top, 16px);
+        }
+
+        .all-events-overlay.active {
+            display: flex;
+        }
+
+        .all-events {
+            flex: 1;
+            width: 100%;
+            max-width: 430px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        .all-events-header {
+            display: flex;
+            align-items: center;
+            padding: 16px 20px;
+            border-bottom: 0.5px solid #e5e5ea;
+        }
+
+        .all-events-header button {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            font-weight: 500;
+            color: var(--navy);
+            cursor: pointer;
+            margin-right: 16px;
+        }
+
+        .all-events-header h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--navy);
+        }
+
+        .all-events-filter {
+            display: flex;
+            gap: 8px;
+            padding: 12px 20px;
+            overflow-x: auto;
+            border-bottom: 0.5px solid #e5e5ea;
+        }
+
+        .all-events-filter::-webkit-scrollbar { display: none; }
+
+        .all-events-filter .filter-chip {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 500;
+            cursor: pointer;
+            white-space: nowrap;
+            border: 1.5px solid #e5e5ea;
+            color: #8e8e93;
+            background: #ffffff;
+            transition: all 0.2s;
+        }
+
+        .all-events-filter .filter-chip.active {
+            border-color: transparent;
+            color: #ffffff;
+        }
+
+        .all-events-filter .filter-chip.active[data-group="all"] { background: var(--navy); border-color: var(--navy); }
+        .all-events-filter .filter-chip.active[data-group="family"] { background: var(--family); }
+        .all-events-filter .filter-chip.active[data-group="uni"] { background: var(--uni); }
+        .all-events-filter .filter-chip.active[data-group="school"] { background: var(--school); }
+        .all-events-filter .filter-chip.active[data-group="lux"] { background: var(--lux); }
+        .all-events-filter .filter-chip.active[data-group="indy"] { background: var(--indy); }
+        .all-events-filter .filter-chip.active[data-group="other"] { background: var(--other); }
+
+        .all-events-list {
+            padding: 16px 20px;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .all-events-group-title {
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: #8e8e93;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+            margin-top: 16px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .all-events-group-title:first-child {
+            margin-top: 0;
+        }
+
+        .all-events-group-title .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .all-events-card {
+            background: #f2f2f7;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            cursor: pointer;
+        }
+
+        .all-events-card:active {
+            background: #e5e5ea;
+        }
+
+        .all-events-card .avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #ffffff;
+        }
+
+        .all-events-card .info {
+            flex: 1;
+        }
+
+        .all-events-card .name {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .all-events-card .detail {
+            font-size: 0.75rem;
+            color: #8e8e93;
+            margin-top: 2px;
+        }
+
+        .calendar-nav button {
+            background: none;
+            border: none;
+            font-size: 1.6rem;
+            color: var(--navy);
+            cursor: pointer;
+            padding: 8px 14px;
             border-radius: 8px;
             font-weight: 500;
         }
@@ -91,22 +314,21 @@
         }
 
         .calendar-nav .month-year {
-            font-size: 0.95rem;
-            font-weight: 600;
-            color: #1c1c1e;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--navy);
         }
 
         .calendar-weekdays {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
             text-align: center;
-            margin-bottom: 6px;
-            border-bottom: 0.5px solid #f2f2f7;
+            margin-bottom: 8px;
             padding-bottom: 8px;
         }
 
         .calendar-weekdays span {
-            font-size: 0.65rem;
+            font-size: 0.75rem;
             font-weight: 600;
             color: #8e8e93;
             text-transform: uppercase;
@@ -117,6 +339,8 @@
             display: grid;
             grid-template-columns: repeat(7, 1fr);
             gap: 2px;
+            flex: 1;
+            align-content: start;
         }
 
         .calendar-day {
@@ -124,8 +348,8 @@
             flex-direction: column;
             align-items: center;
             justify-content: flex-start;
-            padding: 5px 0 4px;
-            min-height: 54px;
+            padding: 8px 0 6px;
+            min-height: 70px;
             border-radius: 10px;
             cursor: pointer;
             position: relative;
@@ -137,12 +361,12 @@
         }
 
         .calendar-day .day-number {
-            font-size: 0.7rem;
+            font-size: 0.9rem;
             font-weight: 400;
-            color: #3a3a3c;
+            color: #1c1c1e;
             margin-bottom: 4px;
-            width: 20px;
-            height: 20px;
+            width: 26px;
+            height: 26px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -166,26 +390,26 @@
         }
 
         .calendar-day .mini-avatar {
-            width: 20px;
-            height: 20px;
+            width: 26px;
+            height: 26px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.45rem;
+            font-size: 0.55rem;
             font-weight: 700;
             color: #ffffff;
-            border: 1.5px solid #ffffff;
+            border: 2px solid #ffffff;
         }
 
         .calendar-day .mini-avatar + .mini-avatar {
-            margin-left: -7px;
+            margin-left: -9px;
         }
 
         .calendar-day .age-label {
-            font-size: 0.45rem;
+            font-size: 0.55rem;
             color: #8e8e93;
-            margin-top: 1px;
+            margin-top: 2px;
             font-weight: 500;
         }
 
@@ -220,14 +444,29 @@
             transform: scale(0.92);
         }
 
+        .fab-month {
+            display: none;
+        }
+
+        .fab-month.visible {
+            display: flex;
+        }
+
+        .fab-day {
+            z-index: 360;
+            position: absolute;
+            bottom: 40px;
+            right: 24px;
+        }
+
         /* Modal */
         .modal-overlay {
             display: none;
             position: fixed;
             inset: 0;
             background: rgba(0,0,0,0.4);
-            z-index: 300;
-            align-items: flex-end;
+            z-index: 500;
+            align-items: center;
             justify-content: center;
             backdrop-filter: blur(2px);
         }
@@ -238,12 +477,12 @@
 
         .modal {
             background: #f2f2f7;
-            border-radius: 14px 14px 0 0;
-            width: 100%;
-            max-width: 430px;
-            max-height: 90vh;
+            border-radius: 14px;
+            width: calc(100% - 32px);
+            max-width: 400px;
+            max-height: 80vh;
             overflow-y: auto;
-            padding-bottom: 34px;
+            padding-bottom: 30px;
         }
 
         .modal-handle {
@@ -379,8 +618,8 @@
             position: fixed;
             inset: 0;
             background: rgba(0,0,0,0.4);
-            z-index: 400;
-            align-items: flex-end;
+            z-index: 600;
+            align-items: center;
             justify-content: center;
             backdrop-filter: blur(2px);
         }
@@ -390,51 +629,33 @@
         }
 
         .picker {
-            background: #f2f2f7;
-            border-radius: 14px 14px 0 0;
-            width: 100%;
-            max-width: 430px;
-            padding-bottom: env(safe-area-inset-bottom, 20px);
-        }
-
-        .picker-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 12px 20px;
-            border-bottom: 0.5px solid #e5e5ea;
             background: #ffffff;
-            border-radius: 14px 14px 0 0;
+            border-radius: 14px;
+            width: 220px;
+            overflow: hidden;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
         }
 
-        .picker-header button {
-            background: none;
-            border: none;
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: var(--navy);
-            cursor: pointer;
-        }
-
-        .picker-header span {
-            font-size: 0.85rem;
-            font-weight: 600;
-        }
 
         .picker-options {
-            background: #ffffff;
+            max-height: 240px;
             overflow-y: auto;
             -webkit-overflow-scrolling: touch;
+            padding: 6px 0;
         }
 
         .picker-option {
-            padding: 11px 20px;
-            font-size: 0.85rem;
+            padding: 10px 14px;
+            font-size: 0.82rem;
             cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
             border-bottom: 0.5px solid #f2f2f7;
+        }
+
+        .picker-option:last-child {
+            border-bottom: none;
         }
 
         .picker-option:active {
@@ -451,7 +672,7 @@
             color: var(--navy);
             font-weight: 700;
             opacity: 0;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
         }
 
         .picker-option.selected .check {
@@ -459,21 +680,20 @@
         }
 
         .picker-option .option-dot {
-            width: 10px;
-            height: 10px;
+            width: 8px;
+            height: 8px;
             border-radius: 50%;
         }
 
-        /* Day detail overlay */
+        /* Day detail - full screen */
         .day-detail-overlay {
             display: none;
             position: fixed;
             inset: 0;
-            background: rgba(0,0,0,0.4);
+            background: #ffffff;
             z-index: 350;
-            align-items: flex-end;
-            justify-content: center;
-            backdrop-filter: blur(2px);
+            flex-direction: column;
+            padding-top: env(safe-area-inset-top, 16px);
         }
 
         .day-detail-overlay.active {
@@ -481,46 +701,48 @@
         }
 
         .day-detail {
-            background: #f2f2f7;
-            border-radius: 14px 14px 0 0;
+            flex: 1;
             width: 100%;
             max-width: 430px;
-            padding-bottom: env(safe-area-inset-bottom, 20px);
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            position: relative;
         }
 
         .day-detail-header {
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            padding: 14px 20px;
-            background: #ffffff;
-            border-radius: 14px 14px 0 0;
+            padding: 16px 20px;
             border-bottom: 0.5px solid #e5e5ea;
-        }
-
-        .day-detail-header h3 {
-            font-size: 0.95rem;
-            font-weight: 600;
         }
 
         .day-detail-header button {
             background: none;
             border: none;
-            font-size: 0.9rem;
+            font-size: 1.5rem;
             font-weight: 500;
             color: var(--navy);
             cursor: pointer;
+            margin-right: 16px;
+        }
+
+        .day-detail-header h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--navy);
         }
 
         .day-detail-list {
-            padding: 12px 20px;
+            padding: 20px;
+            flex: 1;
         }
 
         .day-detail-card {
-            background: #ffffff;
+            background: #f2f2f7;
             border-radius: 12px;
-            padding: 14px 16px;
-            margin-bottom: 8px;
+            padding: 16px;
+            margin-bottom: 10px;
             display: flex;
             align-items: center;
             gap: 14px;
@@ -564,136 +786,37 @@
             color: var(--navy);
         }
 
-        /* Date display */
-        .date-display {
+        /* Date inputs */
+        .date-inputs {
             flex: 1;
             display: flex;
             align-items: center;
-            gap: 6px;
-            cursor: pointer;
+            gap: 2px;
         }
 
-        .date-display .date-text {
+        .date-field {
+            width: 32px;
+            border: none;
             font-size: 0.9rem;
+            font-family: inherit;
+            outline: none;
+            background: transparent;
             color: #1c1c1e;
+            text-align: center;
+            padding: 0;
         }
 
-        .date-display .date-text.placeholder {
+        .date-field-year {
+            width: 46px;
+        }
+
+        .date-field::placeholder {
             color: #c7c7cc;
         }
 
-        .date-hidden {
-            position: absolute;
-            opacity: 0;
-            width: 0;
-            height: 0;
-            pointer-events: none;
-        }
-
-        /* Custom date picker */
-        .date-picker-overlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.4);
-            z-index: 400;
-            align-items: flex-end;
-            justify-content: center;
-            backdrop-filter: blur(2px);
-        }
-
-        .date-picker-overlay.active {
-            display: flex;
-        }
-
-        .date-picker {
-            background: #f2f2f7;
-            border-radius: 14px 14px 0 0;
-            width: 100%;
-            max-width: 430px;
-            padding-bottom: env(safe-area-inset-bottom, 20px);
-        }
-
-        .date-picker-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 12px 20px;
-            border-bottom: 0.5px solid #e5e5ea;
-            background: #ffffff;
-            border-radius: 14px 14px 0 0;
-        }
-
-        .date-picker-header button {
-            background: none;
-            border: none;
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: var(--navy);
-            cursor: pointer;
-        }
-
-        .date-picker-header span {
-            font-size: 0.85rem;
-            font-weight: 600;
-        }
-
-        .date-picker-wheels {
-            display: flex;
-            background: #ffffff;
-            padding: 8px 0;
-            height: 180px;
-            overflow: hidden;
-        }
-
-        .date-wheel {
-            flex: 1;
-            overflow-y: auto;
-            -webkit-overflow-scrolling: touch;
-            scroll-snap-type: y mandatory;
-            text-align: center;
-        }
-
-        .date-wheel::-webkit-scrollbar {
-            display: none;
-        }
-
-        .date-wheel .wheel-padding {
-            height: 72px;
-        }
-
-        .date-wheel-item {
-            height: 36px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.9rem;
+        .date-sep {
             color: #8e8e93;
-            scroll-snap-align: center;
-            cursor: pointer;
-            transition: all 0.1s;
-        }
-
-        .date-wheel-item.active {
-            color: #1c1c1e;
-            font-weight: 600;
-            font-size: 1rem;
-        }
-
-        .date-picker-indicator {
-            position: absolute;
-            top: 50%;
-            left: 0;
-            right: 0;
-            height: 36px;
-            transform: translateY(-50%);
-            border-top: 0.5px solid #e5e5ea;
-            border-bottom: 0.5px solid #e5e5ea;
-            pointer-events: none;
-        }
-
-        .date-picker-wheels-container {
-            position: relative;
+            font-size: 0.9rem;
         }
 
         .btn-delete-section {
@@ -719,34 +842,57 @@
             background: #f2f2f7;
         }
 
-        body::after {
-            content: '';
-            display: block;
-            height: 90px;
-        }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <h1>Birthdays</h1>
+
+    <!-- Year View (main screen) -->
+    <div class="year-view" id="year-view">
+        <div class="year-header">
+            <div class="year-title">2026</div>
+            <button class="nav-list-btn" id="open-all-events-year">☰</button>
+        </div>
+        <div class="months-grid" id="months-grid"></div>
     </div>
 
-    <!-- Calendar -->
-    <div class="calendar-section">
-        <div class="calendar-nav">
-            <button id="prev-month">‹</button>
-            <span class="month-year" id="month-year"></span>
-            <button id="next-month">›</button>
+    <!-- Calendar View (month screen) -->
+    <div class="calendar-view" id="calendar-view">
+        <div class="calendar-section">
+            <div class="calendar-nav">
+                <button id="back-to-year">‹</button>
+                <span class="month-year" id="month-year"></span>
+                <button class="nav-list-btn" id="open-all-events">☰</button>
+            </div>
+            <div class="calendar-weekdays">
+                <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
+            </div>
+            <div class="calendar-days" id="calendar-days"></div>
         </div>
-        <div class="calendar-weekdays">
-            <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
-        </div>
-        <div class="calendar-days" id="calendar-days"></div>
     </div>
 
-    <!-- FAB -->
-    <button class="fab" id="fab-add">+</button>
+    <!-- All Events -->
+    <div class="all-events-overlay" id="all-events-overlay">
+        <div class="all-events">
+            <div class="all-events-header">
+                <button id="all-events-close">‹</button>
+                <h3>All Events</h3>
+            </div>
+            <div class="all-events-filter" id="all-events-filter">
+                <div class="filter-chip active" data-group="all">All</div>
+                <div class="filter-chip" data-group="family">Family</div>
+                <div class="filter-chip" data-group="uni">Uni</div>
+                <div class="filter-chip" data-group="school">School</div>
+                <div class="filter-chip" data-group="lux">Lux</div>
+                <div class="filter-chip" data-group="indy">Indy</div>
+                <div class="filter-chip" data-group="other">Other</div>
+            </div>
+            <div class="all-events-list" id="all-events-list"></div>
+        </div>
+    </div>
+
+    <!-- FAB (only shows in month view) -->
+    <button class="fab fab-month" id="fab-add">+</button>
 
     <!-- Modal -->
     <div class="modal-overlay" id="modal-overlay">
@@ -764,10 +910,14 @@
                 </div>
                 <div class="form-row">
                     <label>Date</label>
-                    <div class="date-display" id="date-display">
-                        <span class="date-text placeholder" id="date-text">dd/mm/yyyy</span>
+                    <div class="date-inputs">
+                        <input type="text" id="input-day" placeholder="DD" maxlength="2" inputmode="numeric" class="date-field">
+                        <span class="date-sep">/</span>
+                        <input type="text" id="input-month" placeholder="MM" maxlength="2" inputmode="numeric" class="date-field">
+                        <span class="date-sep">/</span>
+                        <input type="text" id="input-year" placeholder="YYYY" maxlength="4" inputmode="numeric" class="date-field date-field-year">
                     </div>
-                    <input type="date" class="date-hidden" id="input-date">
+                    <input type="hidden" id="input-date">
                 </div>
                 <div class="form-row">
                     <label>Type</label>
@@ -779,8 +929,8 @@
                 <div class="form-row" id="group-row">
                     <label>Group</label>
                     <div class="group-display" id="group-display">
-                        <div class="group-color-dot" id="group-dot" style="background:var(--family)"></div>
-                        <span class="group-text" id="group-text">Family</span>
+                        <div class="group-color-dot" id="group-dot" style="background:var(--other)"></div>
+                        <span class="group-text" id="group-text">Other</span>
                         <span class="chevron">›</span>
                     </div>
                 </div>
@@ -791,44 +941,21 @@
         </div>
     </div>
 
-    <!-- Date Picker -->
-    <div class="date-picker-overlay" id="date-picker-overlay">
-        <div class="date-picker">
-            <div class="date-picker-header">
-                <button id="date-picker-cancel">Cancel</button>
-                <span>Date</span>
-                <button id="date-picker-done">Done</button>
-            </div>
-            <div class="date-picker-wheels-container">
-                <div class="date-picker-wheels">
-                    <div class="date-wheel" id="wheel-day"></div>
-                    <div class="date-wheel" id="wheel-month"></div>
-                    <div class="date-wheel" id="wheel-year"></div>
-                </div>
-                <div class="date-picker-indicator"></div>
-            </div>
-        </div>
-    </div>
-
     <!-- Day Detail -->
     <div class="day-detail-overlay" id="day-detail-overlay">
         <div class="day-detail">
             <div class="day-detail-header">
+                <button id="day-detail-close">‹</button>
                 <h3 id="day-detail-title"></h3>
-                <button id="day-detail-close">Done</button>
             </div>
             <div class="day-detail-list" id="day-detail-list"></div>
+            <button class="fab fab-day" id="fab-add-day">+</button>
         </div>
     </div>
 
     <!-- Group Picker -->
     <div class="picker-overlay" id="picker-overlay">
         <div class="picker">
-            <div class="picker-header">
-                <button id="picker-cancel">Cancel</button>
-                <span>Group</span>
-                <button id="picker-done">Done</button>
-            </div>
             <div class="picker-options" id="picker-options">
                 <div class="picker-option selected" data-value="family">
                     <div class="option-dot" style="background:var(--family)"></div>
@@ -867,10 +994,11 @@
     <script>
         let friends = JSON.parse(localStorage.getItem('birthday-friends') || '[]');
         let currentMonth = new Date().getMonth();
-        let currentYear = new Date().getFullYear();
+        const currentYear = 2026;
         let editingId = null;
         let selectedType = 'birthday';
-        let selectedGroup = 'family';
+        let selectedGroup = 'other';
+        let viewingDay = null;
 
         const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
             'July', 'August', 'September', 'October', 'November', 'December'];
@@ -910,105 +1038,64 @@
             });
         });
 
-        // Date display
-        function formatDateDisplay(dateStr) {
-            if (!dateStr) return null;
-            const parts = dateStr.split('-');
-            return `${parts[2]}/${parts[1]}/${parts[0]}`;
-        }
-
-        const shortMonths = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-        let pickedDay = 1, pickedMonth = 1, pickedYear = 2000;
-
-        function buildWheel(container, items, selected) {
-            container.innerHTML = '<div class="wheel-padding"></div>';
-            items.forEach((item, i) => {
-                const el = document.createElement('div');
-                el.className = 'date-wheel-item' + (item.value === selected ? ' active' : '');
-                el.textContent = item.label;
-                el.dataset.value = item.value;
-                container.appendChild(el);
-            });
-            container.innerHTML += '<div class="wheel-padding"></div>';
-
-            const activeEl = container.querySelector('.active');
-            if (activeEl) {
-                setTimeout(() => {
-                    container.scrollTop = activeEl.offsetTop - container.offsetTop - 72;
-                }, 10);
+        // Date fields - auto advance with validation
+        document.getElementById('input-day').addEventListener('input', (e) => {
+            let val = e.target.value.replace(/\D/g, '');
+            if (val.length === 2) {
+                const num = parseInt(val);
+                if (num > 31) val = '31';
+                if (num < 1 && val.length === 2) val = '01';
+                e.target.value = val;
+                document.getElementById('input-month').focus();
             }
+            e.target.value = val;
+        });
 
-            container.addEventListener('scroll', () => {
-                const center = container.scrollTop + 72 + 18;
-                const items = container.querySelectorAll('.date-wheel-item');
-                let closest = null, closestDist = Infinity;
-                items.forEach(el => {
-                    const dist = Math.abs(el.offsetTop - container.offsetTop - container.scrollTop - 72);
-                    if (dist < closestDist) { closestDist = dist; closest = el; }
-                });
-                items.forEach(el => el.classList.remove('active'));
-                if (closest) closest.classList.add('active');
-            });
+        document.getElementById('input-month').addEventListener('input', (e) => {
+            let val = e.target.value.replace(/\D/g, '');
+            if (val.length === 2) {
+                const num = parseInt(val);
+                if (num > 12) val = '12';
+                if (num < 1 && val.length === 2) val = '01';
+                e.target.value = val;
+                document.getElementById('input-year').focus();
+            }
+            e.target.value = val;
+        });
+
+        document.getElementById('input-year').addEventListener('input', (e) => {
+            let val = e.target.value.replace(/\D/g, '');
+            if (val.length === 4) {
+                const num = parseInt(val);
+                const thisYear = new Date().getFullYear();
+                if (num > thisYear) val = String(thisYear);
+                e.target.value = val;
+            }
+            e.target.value = val;
+        });
+
+        function getDateValue() {
+            const dd = document.getElementById('input-day').value.padStart(2, '0');
+            const mm = document.getElementById('input-month').value.padStart(2, '0');
+            const yyyy = document.getElementById('input-year').value;
+            if (dd && mm && yyyy && yyyy.length === 4) {
+                return `${yyyy}-${mm}-${dd}`;
+            }
+            return '';
         }
 
-        function openDatePicker() {
-            const dateVal = document.getElementById('input-date').value;
-            if (dateVal) {
-                const parts = dateVal.split('-');
-                pickedYear = parseInt(parts[0]);
-                pickedMonth = parseInt(parts[1]);
-                pickedDay = parseInt(parts[2]);
+        function setDateFields(dateStr) {
+            if (dateStr) {
+                const parts = dateStr.split('-');
+                document.getElementById('input-day').value = parts[2];
+                document.getElementById('input-month').value = parts[1];
+                document.getElementById('input-year').value = parts[0];
             } else {
-                const now = new Date();
-                pickedDay = now.getDate();
-                pickedMonth = now.getMonth() + 1;
-                pickedYear = now.getFullYear();
+                document.getElementById('input-day').value = '';
+                document.getElementById('input-month').value = '';
+                document.getElementById('input-year').value = '';
             }
-
-            const days = Array.from({length: 31}, (_, i) => ({ value: i + 1, label: String(i + 1) }));
-            const months = shortMonths.map((m, i) => ({ value: i + 1, label: m }));
-            const thisYear = new Date().getFullYear();
-            const years = Array.from({length: 80}, (_, i) => ({ value: thisYear - i, label: String(thisYear - i) }));
-
-            buildWheel(document.getElementById('wheel-day'), days, pickedDay);
-            buildWheel(document.getElementById('wheel-month'), months, pickedMonth);
-            buildWheel(document.getElementById('wheel-year'), years, pickedYear);
-
-            document.getElementById('date-picker-overlay').classList.add('active');
         }
-
-        document.getElementById('date-display').addEventListener('click', openDatePicker);
-
-        document.getElementById('date-picker-done').addEventListener('click', () => {
-            const dayEl = document.querySelector('#wheel-day .date-wheel-item.active');
-            const monthEl = document.querySelector('#wheel-month .date-wheel-item.active');
-            const yearEl = document.querySelector('#wheel-year .date-wheel-item.active');
-
-            if (dayEl && monthEl && yearEl) {
-                pickedDay = parseInt(dayEl.dataset.value);
-                pickedMonth = parseInt(monthEl.dataset.value);
-                pickedYear = parseInt(yearEl.dataset.value);
-
-                const dd = String(pickedDay).padStart(2, '0');
-                const mm = String(pickedMonth).padStart(2, '0');
-                document.getElementById('input-date').value = `${pickedYear}-${mm}-${dd}`;
-
-                const text = document.getElementById('date-text');
-                text.textContent = `${dd}/${mm}/${pickedYear}`;
-                text.classList.remove('placeholder');
-            }
-            document.getElementById('date-picker-overlay').classList.remove('active');
-        });
-
-        document.getElementById('date-picker-cancel').addEventListener('click', () => {
-            document.getElementById('date-picker-overlay').classList.remove('active');
-        });
-
-        document.getElementById('date-picker-overlay').addEventListener('click', (e) => {
-            if (e.target === e.currentTarget) {
-                document.getElementById('date-picker-overlay').classList.remove('active');
-            }
-        });
 
         // Group picker
         document.getElementById('group-display').addEventListener('click', () => {
@@ -1022,21 +1109,11 @@
             opt.addEventListener('click', () => {
                 document.querySelectorAll('.picker-option').forEach(o => o.classList.remove('selected'));
                 opt.classList.add('selected');
-            });
-        });
-
-        document.getElementById('picker-done').addEventListener('click', () => {
-            const selected = document.querySelector('.picker-option.selected');
-            if (selected) {
-                selectedGroup = selected.dataset.value;
+                selectedGroup = opt.dataset.value;
                 document.getElementById('group-text').textContent = groupNames[selectedGroup];
                 document.getElementById('group-dot').style.background = groupColors[selectedGroup];
-            }
-            document.getElementById('picker-overlay').classList.remove('active');
-        });
-
-        document.getElementById('picker-cancel').addEventListener('click', () => {
-            document.getElementById('picker-overlay').classList.remove('active');
+                document.getElementById('picker-overlay').classList.remove('active');
+            });
         });
 
         document.getElementById('picker-overlay').addEventListener('click', (e) => {
@@ -1081,17 +1158,6 @@
                         inner += `<div class="mini-avatar" style="background:var(--${f.group})">${getInitials(f.name)}</div>`;
                     });
                     inner += '</div>';
-
-                    if (eventsOnDay.length === 1) {
-                        const f = eventsOnDay[0];
-                        if (f.type === 'birthday') {
-                            const birthYear = new Date(f.date + 'T00:00:00').getFullYear();
-                            const turningAge = currentYear - birthYear;
-                            if (turningAge > 0 && turningAge < 120) {
-                                inner += `<span class="age-label">Turning ${turningAge}</span>`;
-                            }
-                        }
-                    }
                 }
 
                 container.innerHTML += `<div class="${classes}" data-day="${day}">${inner}</div>`;
@@ -1104,38 +1170,57 @@
                         const d = new Date(f.date + 'T00:00:00');
                         return d.getDate() === day && d.getMonth() === currentMonth;
                     });
-                    if (eventsOnDay.length > 0) {
-                        openDayDetail(day, eventsOnDay);
-                    }
+                    openDayDetail(day, eventsOnDay);
                 });
             });
         }
 
         // Day detail
+        function getOrdinal(n) {
+            if (n > 3 && n < 21) return n + 'th';
+            switch (n % 10) {
+                case 1: return n + 'st';
+                case 2: return n + 'nd';
+                case 3: return n + 'rd';
+                default: return n + 'th';
+            }
+        }
+
+        function formatFullDate(dateStr) {
+            const d = new Date(dateStr + 'T00:00:00');
+            return `${getOrdinal(d.getDate())} of ${monthNames[d.getMonth()]} ${d.getFullYear()}`;
+        }
+
         function openDayDetail(day, events) {
+            viewingDay = day;
             document.getElementById('day-detail-title').textContent = `${day} ${monthNames[currentMonth]}`;
             const list = document.getElementById('day-detail-list');
-            list.innerHTML = events.map(f => {
-                const typeLabel = f.type === 'sant' ? 'Sant' : 'Birthday';
-                let ageHtml = '';
-                if (f.type === 'birthday') {
-                    const birthYear = new Date(f.date + 'T00:00:00').getFullYear();
-                    const turningAge = currentYear - birthYear;
-                    if (turningAge > 0 && turningAge < 120) {
-                        ageHtml = `<span class="age-badge">Turning ${turningAge}</span>`;
+
+            if (events.length === 0) {
+                list.innerHTML = '<p style="text-align:center; color:#8e8e93; font-size:0.85rem; padding:20px 0;">No events this day</p>';
+            } else {
+                list.innerHTML = events.map(f => {
+                    const typeLabel = f.type === 'sant' ? 'Sant' : 'Birthday';
+                    let ageHtml = '';
+                    if (f.type === 'birthday') {
+                        const birthYear = new Date(f.date + 'T00:00:00').getFullYear();
+                        const turningAge = currentYear - birthYear;
+                        if (turningAge > 0 && turningAge < 120) {
+                            ageHtml = `<span class="age-badge">Turning ${turningAge}</span>`;
+                        }
                     }
-                }
-                return `
-                    <div class="day-detail-card" onclick="document.getElementById('day-detail-overlay').classList.remove('active'); editFriend('${f.id}')">
-                        <div class="avatar" style="background:var(--${f.group})">${getInitials(f.name)}</div>
-                        <div class="info">
-                            <div class="name">${f.name}</div>
-                            <div class="detail">${typeLabel} · ${groupNames[f.group]}</div>
+                    return `
+                        <div class="day-detail-card" onclick="document.getElementById('day-detail-overlay').classList.remove('active'); editFriend('${f.id}')">
+                            <div class="avatar" style="background:var(--${f.group})">${getInitials(f.name)}</div>
+                            <div class="info">
+                                <div class="name">${f.name}</div>
+                                <div class="detail">${formatFullDate(f.date)} · ${typeLabel}</div>
+                            </div>
+                            ${ageHtml}
                         </div>
-                        ${ageHtml}
-                    </div>
-                `;
-            }).join('');
+                    `;
+                }).join('');
+            }
             document.getElementById('day-detail-overlay').classList.add('active');
         }
 
@@ -1143,25 +1228,88 @@
             document.getElementById('day-detail-overlay').classList.remove('active');
         });
 
-        document.getElementById('day-detail-overlay').addEventListener('click', (e) => {
-            if (e.target === e.currentTarget) {
-                document.getElementById('day-detail-overlay').classList.remove('active');
+        // All events
+        let allEventsFilter = 'all';
+
+        function renderAllEvents() {
+            const list = document.getElementById('all-events-list');
+            const filtered = allEventsFilter === 'all' ? friends : friends.filter(f => f.group === allEventsFilter);
+
+            if (filtered.length === 0) {
+                list.innerHTML = '<p style="text-align:center; color:#8e8e93; font-size:0.85rem; padding:40px 0;">No events</p>';
+                return;
             }
+
+            const groups = ['family', 'uni', 'school', 'lux', 'indy', 'other'];
+            let html = '';
+
+            if (allEventsFilter === 'all') {
+                groups.forEach(group => {
+                    const groupFriends = filtered.filter(f => f.group === group).sort((a, b) => a.name.localeCompare(b.name));
+                    if (groupFriends.length === 0) return;
+
+                    html += `<div class="all-events-group-title"><div class="dot" style="background:var(--${group})"></div>${groupNames[group]}</div>`;
+                    html += renderAllEventsCards(groupFriends);
+                });
+            } else {
+                const sorted = filtered.sort((a, b) => a.name.localeCompare(b.name));
+                html += renderAllEventsCards(sorted);
+            }
+
+            list.innerHTML = html;
+        }
+
+        function renderAllEventsCards(list) {
+            return list.map(f => {
+                const typeLabel = f.type === 'sant' ? 'Sant' : 'Birthday';
+                return `
+                    <div class="all-events-card" onclick="document.getElementById('all-events-overlay').classList.remove('active'); editFriend('${f.id}')">
+                        <div class="avatar" style="background:var(--${f.group})">${getInitials(f.name)}</div>
+                        <div class="info">
+                            <div class="name">${f.name}</div>
+                            <div class="detail">${formatFullDate(f.date)} · ${typeLabel}</div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        document.getElementById('open-all-events').addEventListener('click', () => {
+            renderAllEvents();
+            document.getElementById('all-events-overlay').classList.add('active');
+        });
+
+        document.getElementById('open-all-events-year').addEventListener('click', () => {
+            renderAllEvents();
+            document.getElementById('all-events-overlay').classList.add('active');
+        });
+
+        document.querySelectorAll('#all-events-filter .filter-chip').forEach(chip => {
+            chip.addEventListener('click', () => {
+                document.querySelectorAll('#all-events-filter .filter-chip').forEach(c => c.classList.remove('active'));
+                chip.classList.add('active');
+                allEventsFilter = chip.dataset.group;
+                renderAllEvents();
+            });
+        });
+
+        document.getElementById('all-events-close').addEventListener('click', () => {
+            document.getElementById('all-events-overlay').classList.remove('active');
         });
 
         // Modal
-        function openModal(friend = null) {
+        function openModal(friend = null, prefillDay = null, prefillMonth = null) {
             editingId = friend ? friend.id : null;
             document.getElementById('modal-title').textContent = friend ? 'Edit' : 'New Event';
             document.getElementById('input-name').value = friend ? friend.name : '';
-            document.getElementById('input-date').value = friend ? friend.date : '';
-            const dateText = document.getElementById('date-text');
-            if (friend && friend.date) {
-                dateText.textContent = formatDateDisplay(friend.date);
-                dateText.classList.remove('placeholder');
+            if (friend) {
+                setDateFields(friend.date);
+            } else if (prefillDay && prefillMonth) {
+                document.getElementById('input-day').value = String(prefillDay).padStart(2, '0');
+                document.getElementById('input-month').value = String(prefillMonth).padStart(2, '0');
+                document.getElementById('input-year').value = '';
             } else {
-                dateText.textContent = 'dd/mm/yyyy';
-                dateText.classList.add('placeholder');
+                setDateFields('');
             }
 
             document.getElementById('delete-section').style.display = friend ? 'block' : 'none';
@@ -1189,6 +1337,9 @@
         }
 
         document.getElementById('fab-add').addEventListener('click', () => openModal());
+        document.getElementById('fab-add-day').addEventListener('click', () => {
+            openModal(null, viewingDay, currentMonth + 1);
+        });
         document.getElementById('btn-cancel').addEventListener('click', closeModal);
         document.getElementById('modal-overlay').addEventListener('click', (e) => {
             if (e.target === e.currentTarget) closeModal();
@@ -1196,16 +1347,20 @@
 
         document.getElementById('btn-save').addEventListener('click', () => {
             const rawName = document.getElementById('input-name').value.trim();
-            const date = document.getElementById('input-date').value;
+            const date = getDateValue();
             const type = selectedType;
             const group = selectedGroup;
 
             let valid = true;
             const nameInput = document.getElementById('input-name');
-            const dateText = document.getElementById('date-text');
+            const dayInput = document.getElementById('input-day');
+            const monthInput = document.getElementById('input-month');
+            const yearInput = document.getElementById('input-year');
 
             nameInput.style.border = '';
-            dateText.style.color = '';
+            dayInput.style.color = '';
+            monthInput.style.color = '';
+            yearInput.style.color = '';
 
             if (!rawName) {
                 nameInput.style.border = '1px solid #ff3b30';
@@ -1213,7 +1368,9 @@
                 valid = false;
             }
             if (!date) {
-                dateText.style.color = '#ff3b30';
+                dayInput.style.color = '#ff3b30';
+                monthInput.style.color = '#ff3b30';
+                yearInput.style.color = '#ff3b30';
                 valid = false;
             }
 
@@ -1242,19 +1399,38 @@
             }
         });
 
-        document.getElementById('prev-month').addEventListener('click', () => {
-            currentMonth--;
-            if (currentMonth < 0) { currentMonth = 11; currentYear--; }
-            renderCalendar();
+        // Year view
+        function renderYearView() {
+            const grid = document.getElementById('months-grid');
+            const today = new Date();
+            grid.innerHTML = monthNames.map((name, i) => {
+                const isCurrent = i === today.getMonth() && currentYear === today.getFullYear();
+                let classes = 'month-card';
+                if (isCurrent) classes += ' current';
+                return `
+                    <div class="${classes}" data-month="${i}">
+                        <div class="month-name">${name.slice(0, 3)}</div>
+                    </div>
+                `;
+            }).join('');
+
+            grid.querySelectorAll('.month-card').forEach(card => {
+                card.addEventListener('click', () => {
+                    currentMonth = parseInt(card.dataset.month);
+                    renderCalendar();
+                    document.getElementById('calendar-view').classList.add('active');
+                    document.getElementById('fab-add').classList.add('visible');
+                });
+            });
+        }
+
+        document.getElementById('back-to-year').addEventListener('click', () => {
+            document.getElementById('calendar-view').classList.remove('active');
+            document.getElementById('fab-add').classList.remove('visible');
+            renderYearView();
         });
 
-        document.getElementById('next-month').addEventListener('click', () => {
-            currentMonth++;
-            if (currentMonth > 11) { currentMonth = 0; currentYear++; }
-            renderCalendar();
-        });
-
-        renderCalendar();
+        renderYearView();
     </script>
 </body>
 </html>
