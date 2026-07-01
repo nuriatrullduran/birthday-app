@@ -98,6 +98,63 @@
             border: 1.5px solid var(--navy);
         }
 
+        /* Coming up */
+        .coming-up-section {
+            margin-top: 28px;
+        }
+
+        .coming-up-title {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #8e8e93;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 10px;
+        }
+
+        .coming-up-card {
+            background: #f8f8fa;
+            border-radius: 12px;
+            padding: 14px 16px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .coming-up-card .avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.8rem;
+            color: #ffffff;
+        }
+
+        .coming-up-card .info {
+            flex: 1;
+        }
+
+        .coming-up-card .name {
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        .coming-up-card .detail {
+            font-size: 0.7rem;
+            color: #8e8e93;
+            margin-top: 2px;
+        }
+
+        .coming-up-card .days-left {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--navy);
+        }
+
         /* Calendar */
         .calendar-view {
             display: none;
@@ -107,6 +164,7 @@
             z-index: 100;
             flex-direction: column;
             padding-top: env(safe-area-inset-top, 16px);
+            overflow-y: auto;
         }
 
         .calendar-view.active {
@@ -118,7 +176,6 @@
             margin: 0;
             border-radius: 0;
             padding: 8px 14px;
-            flex: 1;
             display: flex;
             flex-direction: column;
         }
@@ -134,7 +191,7 @@
         .nav-list-btn {
             background: none;
             border: none;
-            font-size: 1.1rem;
+            font-size: 1.4rem;
             color: var(--navy);
             cursor: pointer;
             padding: 6px 10px;
@@ -303,7 +360,7 @@
         .calendar-nav button {
             background: none;
             border: none;
-            font-size: 1.6rem;
+            font-size: 1.8rem;
             color: var(--navy);
             cursor: pointer;
             padding: 8px 14px;
@@ -341,7 +398,6 @@
             display: grid;
             grid-template-columns: repeat(7, 1fr);
             gap: 2px;
-            flex: 1;
             align-content: start;
         }
 
@@ -360,6 +416,11 @@
 
         .calendar-day:active {
             background: #f2f2f7;
+        }
+
+        .calendar-day.selected {
+            background: #eef2f7;
+            border-radius: 10px;
         }
 
         .calendar-day .day-number {
@@ -415,6 +476,74 @@
             font-weight: 500;
         }
 
+        /* Day entries below calendar */
+        .day-entries {
+            padding: 12px 16px;
+            overflow-y: auto;
+            border-top: 0.5px solid #e5e5ea;
+        }
+
+        .day-entries-title {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--navy);
+            margin-bottom: 10px;
+        }
+
+        .day-entries-empty {
+            font-size: 0.8rem;
+            color: #8e8e93;
+            padding: 8px 0;
+        }
+
+        .day-entry-card {
+            background: #f8f8fa;
+            border-radius: 12px;
+            padding: 14px 16px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+        }
+
+        .day-entry-card:active {
+            background: #e5e5ea;
+        }
+
+        .day-entry-card .avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.8rem;
+            color: #ffffff;
+        }
+
+        .day-entry-card .info {
+            flex: 1;
+        }
+
+        .day-entry-card .name {
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        .day-entry-card .detail {
+            font-size: 0.7rem;
+            color: #8e8e93;
+            margin-top: 2px;
+        }
+
+        .day-entry-card .age-badge {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--navy);
+        }
+
         /* FAB */
         .fab {
             position: fixed;
@@ -454,12 +583,6 @@
             display: flex;
         }
 
-        .fab-day {
-            z-index: 360;
-            position: absolute;
-            bottom: 40px;
-            right: 24px;
-        }
 
         /* Modal */
         .modal-overlay {
@@ -687,106 +810,6 @@
             border-radius: 50%;
         }
 
-        /* Day detail - full screen */
-        .day-detail-overlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: #ffffff;
-            z-index: 350;
-            flex-direction: column;
-            padding-top: env(safe-area-inset-top, 16px);
-        }
-
-        .day-detail-overlay.active {
-            display: flex;
-        }
-
-        .day-detail {
-            flex: 1;
-            width: 100%;
-            max-width: 430px;
-            margin: 0 auto;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-        }
-
-        .day-detail-header {
-            display: flex;
-            align-items: center;
-            padding: 16px 20px;
-            border-bottom: 0.5px solid #e5e5ea;
-        }
-
-        .day-detail-header button {
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            font-weight: 500;
-            color: var(--navy);
-            cursor: pointer;
-            margin-right: 16px;
-        }
-
-        .day-detail-header h3 {
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: var(--navy);
-        }
-
-        .day-detail-list {
-            padding: 20px;
-            flex: 1;
-        }
-
-        .day-detail-card {
-            background: #f2f2f7;
-            border-radius: 12px;
-            padding: 16px;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            cursor: pointer;
-        }
-
-        .day-detail-card:active {
-            background: #f9f9f9;
-        }
-
-        .day-detail-card .avatar {
-            width: 42px;
-            height: 42px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-            font-size: 0.9rem;
-            color: #ffffff;
-        }
-
-        .day-detail-card .info {
-            flex: 1;
-        }
-
-        .day-detail-card .name {
-            font-weight: 600;
-            font-size: 0.9rem;
-        }
-
-        .day-detail-card .detail {
-            font-size: 0.75rem;
-            color: #8e8e93;
-            margin-top: 2px;
-        }
-
-        .day-detail-card .age-badge {
-            font-size: 0.8rem;
-            font-weight: 700;
-            color: var(--navy);
-        }
 
         /* Date inputs */
         .date-inputs {
@@ -856,6 +879,7 @@
             <button class="nav-list-btn" id="open-all-events-year">☰</button>
         </div>
         <div class="months-grid" id="months-grid"></div>
+        <div class="coming-up-section" id="coming-up-section"></div>
     </div>
 
     <!-- Calendar View (month screen) -->
@@ -871,6 +895,7 @@
             </div>
             <div class="calendar-days" id="calendar-days"></div>
         </div>
+        <div class="day-entries" id="day-entries"></div>
     </div>
 
     <!-- All Events -->
@@ -944,16 +969,6 @@
     </div>
 
     <!-- Day Detail -->
-    <div class="day-detail-overlay" id="day-detail-overlay">
-        <div class="day-detail">
-            <div class="day-detail-header">
-                <button id="day-detail-close">‹</button>
-                <h3 id="day-detail-title"></h3>
-            </div>
-            <div class="day-detail-list" id="day-detail-list"></div>
-            <button class="fab fab-day" id="fab-add-day">+</button>
-        </div>
-    </div>
 
     <!-- Group Picker -->
     <div class="picker-overlay" id="picker-overlay">
@@ -1167,14 +1182,51 @@
 
             document.querySelectorAll('.calendar-day[data-day]').forEach(el => {
                 el.addEventListener('click', () => {
+                    document.querySelectorAll('.calendar-day').forEach(d => d.classList.remove('selected'));
+                    el.classList.add('selected');
                     const day = parseInt(el.dataset.day);
+                    viewingDay = day;
                     const eventsOnDay = friends.filter(f => {
                         const d = new Date(f.date + 'T00:00:00');
                         return d.getDate() === day && d.getMonth() === currentMonth;
                     });
-                    openDayDetail(day, eventsOnDay);
+                    showDayEntries(day, eventsOnDay);
                 });
             });
+        }
+
+        // Day entries below calendar
+        function showDayEntries(day, events) {
+            const container = document.getElementById('day-entries');
+            let html = `<div class="day-entries-title">${day} ${monthNames[currentMonth]}</div>`;
+
+            if (events.length === 0) {
+                html += '<p class="day-entries-empty">No events this day</p>';
+            } else {
+                html += events.map(f => {
+                    const typeLabel = f.type === 'sant' ? 'Sant' : 'Birthday';
+                    let ageHtml = '';
+                    if (f.type === 'birthday') {
+                        const birthYear = new Date(f.date + 'T00:00:00').getFullYear();
+                        const turningAge = currentYear - birthYear;
+                        if (turningAge > 0 && turningAge < 120) {
+                            ageHtml = `<span class="age-badge">Turning ${turningAge}</span>`;
+                        }
+                    }
+                    return `
+                        <div class="day-entry-card" onclick="editFriend('${f.id}')">
+                            <div class="avatar" style="background:var(--${f.group})">${getInitials(f.name)}</div>
+                            <div class="info">
+                                <div class="name">${f.name}</div>
+                                <div class="detail">${formatFullDate(f.date)} · ${typeLabel}</div>
+                            </div>
+                            ${ageHtml}
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            container.innerHTML = html;
         }
 
         // Day detail
@@ -1193,42 +1245,6 @@
             return `${getOrdinal(d.getDate())} of ${monthNames[d.getMonth()]} ${d.getFullYear()}`;
         }
 
-        function openDayDetail(day, events) {
-            viewingDay = day;
-            document.getElementById('day-detail-title').textContent = `${day} ${monthNames[currentMonth]}`;
-            const list = document.getElementById('day-detail-list');
-
-            if (events.length === 0) {
-                list.innerHTML = '<p style="text-align:center; color:#8e8e93; font-size:0.85rem; padding:20px 0;">No events this day</p>';
-            } else {
-                list.innerHTML = events.map(f => {
-                    const typeLabel = f.type === 'sant' ? 'Sant' : 'Birthday';
-                    let ageHtml = '';
-                    if (f.type === 'birthday') {
-                        const birthYear = new Date(f.date + 'T00:00:00').getFullYear();
-                        const turningAge = currentYear - birthYear;
-                        if (turningAge > 0 && turningAge < 120) {
-                            ageHtml = `<span class="age-badge">Turning ${turningAge}</span>`;
-                        }
-                    }
-                    return `
-                        <div class="day-detail-card" onclick="document.getElementById('day-detail-overlay').classList.remove('active'); editFriend('${f.id}')">
-                            <div class="avatar" style="background:var(--${f.group})">${getInitials(f.name)}</div>
-                            <div class="info">
-                                <div class="name">${f.name}</div>
-                                <div class="detail">${formatFullDate(f.date)} · ${typeLabel}</div>
-                            </div>
-                            ${ageHtml}
-                        </div>
-                    `;
-                }).join('');
-            }
-            document.getElementById('day-detail-overlay').classList.add('active');
-        }
-
-        document.getElementById('day-detail-close').addEventListener('click', () => {
-            document.getElementById('day-detail-overlay').classList.remove('active');
-        });
 
         // All events
         let allEventsFilter = 'all';
@@ -1338,9 +1354,12 @@
             if (friend) openModal(friend);
         }
 
-        document.getElementById('fab-add').addEventListener('click', () => openModal());
-        document.getElementById('fab-add-day').addEventListener('click', () => {
-            openModal(null, viewingDay, currentMonth + 1);
+        document.getElementById('fab-add').addEventListener('click', () => {
+            if (viewingDay) {
+                openModal(null, viewingDay, currentMonth + 1);
+            } else {
+                openModal();
+            }
         });
         document.getElementById('btn-cancel').addEventListener('click', closeModal);
         document.getElementById('modal-overlay').addEventListener('click', (e) => {
@@ -1401,6 +1420,51 @@
             }
         });
 
+        // Coming up
+        function getDaysUntil(month, day) {
+            const today = new Date();
+            const todayStart = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+            let next = new Date(today.getFullYear(), month - 1, day);
+            if (next < todayStart) {
+                next = new Date(today.getFullYear() + 1, month - 1, day);
+            }
+            return Math.round((next - todayStart) / (1000 * 60 * 60 * 24));
+        }
+
+        function renderComingUp() {
+            const section = document.getElementById('coming-up-section');
+            if (friends.length === 0) {
+                section.innerHTML = '';
+                return;
+            }
+
+            const sorted = [...friends].map(f => {
+                const d = new Date(f.date + 'T00:00:00');
+                const daysLeft = getDaysUntil(d.getMonth() + 1, d.getDate());
+                return { ...f, daysLeft };
+            }).sort((a, b) => a.daysLeft - b.daysLeft).slice(0, 5);
+
+            let html = '<div class="coming-up-title">Coming up</div>';
+            html += sorted.map(f => {
+                const typeLabel = f.type === 'sant' ? 'Sant' : 'Birthday';
+                const d = new Date(f.date + 'T00:00:00');
+                const dateStr = `${d.getDate()} ${monthNames[d.getMonth()].slice(0, 3)}`;
+                let daysText = f.daysLeft === 0 ? 'Today' : f.daysLeft + 'd';
+                return `
+                    <div class="coming-up-card">
+                        <div class="avatar" style="background:var(--${f.group})">${getInitials(f.name)}</div>
+                        <div class="info">
+                            <div class="name">${f.name}</div>
+                            <div class="detail">${dateStr} · ${typeLabel}</div>
+                        </div>
+                        <span class="days-left">${daysText}</span>
+                    </div>
+                `;
+            }).join('');
+
+            section.innerHTML = html;
+        }
+
         // Year view
         function renderYearView() {
             const grid = document.getElementById('months-grid');
@@ -1430,9 +1494,11 @@
             document.getElementById('calendar-view').classList.remove('active');
             document.getElementById('fab-add').classList.remove('visible');
             renderYearView();
+            renderComingUp();
         });
 
         renderYearView();
+        renderComingUp();
     </script>
 </body>
 </html>
