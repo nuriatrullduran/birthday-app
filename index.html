@@ -250,6 +250,26 @@
             color: var(--navy);
         }
 
+        .all-events-search {
+            padding: 10px 20px;
+        }
+
+        .all-events-search input {
+            width: 100%;
+            padding: 10px 14px;
+            border-radius: 10px;
+            border: none;
+            background: #f2f2f7;
+            font-size: 0.85rem;
+            font-family: inherit;
+            outline: none;
+            color: #1c1c1e;
+        }
+
+        .all-events-search input::placeholder {
+            color: #8e8e93;
+        }
+
         .all-events-filter {
             display: flex;
             gap: 8px;
@@ -886,8 +906,10 @@
     <div class="calendar-view" id="calendar-view">
         <div class="calendar-section">
             <div class="calendar-nav">
-                <button id="back-to-year">‹</button>
+                <button id="back-to-year" style="font-size:0.85rem; font-weight:700; color:var(--navy);">2026</button>
+                <button id="prev-month">‹</button>
                 <span class="month-year" id="month-year"></span>
+                <button id="next-month">›</button>
                 <button class="nav-list-btn" id="open-all-events">☰</button>
             </div>
             <div class="calendar-weekdays">
@@ -904,6 +926,9 @@
             <div class="all-events-header">
                 <button id="all-events-close">‹</button>
                 <h3>All Events</h3>
+            </div>
+            <div class="all-events-search">
+                <input type="text" id="all-events-search-input" placeholder="Search by name...">
             </div>
             <div class="all-events-filter" id="all-events-filter">
                 <div class="filter-chip active" data-group="all">All</div>
@@ -1251,7 +1276,11 @@
 
         function renderAllEvents() {
             const list = document.getElementById('all-events-list');
-            const filtered = allEventsFilter === 'all' ? friends : friends.filter(f => f.group === allEventsFilter);
+            const searchTerm = (document.getElementById('all-events-search-input').value || '').toLowerCase().trim();
+            let filtered = allEventsFilter === 'all' ? friends : friends.filter(f => f.group === allEventsFilter);
+            if (searchTerm) {
+                filtered = filtered.filter(f => f.name.toLowerCase().includes(searchTerm));
+            }
 
             if (filtered.length === 0) {
                 list.innerHTML = '<p style="text-align:center; color:#8e8e93; font-size:0.85rem; padding:40px 0;">No events</p>';
@@ -1309,6 +1338,10 @@
                 allEventsFilter = chip.dataset.group;
                 renderAllEvents();
             });
+        });
+
+        document.getElementById('all-events-search-input').addEventListener('input', (e) => {
+            renderAllEvents();
         });
 
         document.getElementById('all-events-close').addEventListener('click', () => {
@@ -1442,20 +1475,19 @@
                 const d = new Date(f.date + 'T00:00:00');
                 const daysLeft = getDaysUntil(d.getMonth() + 1, d.getDate());
                 return { ...f, daysLeft };
-            }).sort((a, b) => a.daysLeft - b.daysLeft).slice(0, 4);
+            }).sort((a, b) => a.daysLeft - b.daysLeft).slice(0, 5);
 
             let html = '<div class="coming-up-title">Coming up</div>';
             html += sorted.map(f => {
                 const typeLabel = f.type === 'sant' ? 'Sant' : 'Birthday';
                 const d = new Date(f.date + 'T00:00:00');
-                const dateStr = `${d.getDate()} ${monthNames[d.getMonth()].slice(0, 3)}`;
                 let daysText = f.daysLeft === 0 ? 'Today' : f.daysLeft + 'd';
                 return `
                     <div class="coming-up-card">
                         <div class="avatar" style="background:var(--${f.group})">${getInitials(f.name)}</div>
                         <div class="info">
                             <div class="name">${f.name}</div>
-                            <div class="detail">${dateStr} · ${typeLabel}</div>
+                            <div class="detail">${formatFullDate(f.date)} · ${typeLabel}</div>
                         </div>
                         <span class="days-left">${daysText}</span>
                     </div>
@@ -1493,8 +1525,27 @@
         document.getElementById('back-to-year').addEventListener('click', () => {
             document.getElementById('calendar-view').classList.remove('active');
             document.getElementById('fab-add').classList.remove('visible');
+            viewingDay = null;
             renderYearView();
             renderComingUp();
+        });
+
+        document.getElementById('prev-month').addEventListener('click', () => {
+            if (currentMonth > 0) {
+                currentMonth--;
+                viewingDay = null;
+                document.getElementById('day-entries').innerHTML = '';
+                renderCalendar();
+            }
+        });
+
+        document.getElementById('next-month').addEventListener('click', () => {
+            if (currentMonth < 11) {
+                currentMonth++;
+                viewingDay = null;
+                document.getElementById('day-entries').innerHTML = '';
+                renderCalendar();
+            }
         });
 
         renderYearView();
