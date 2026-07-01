@@ -1,0 +1,23 @@
+<svg width="180" height="180" viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg">
+  <rect width="180" height="180" fill="#ffffff"/>
+  <!-- Confetti -->
+  <rect x="30" y="50" width="6" height="20" rx="3" fill="#7c5cbf" transform="rotate(-15 33 60)"/>
+  <rect x="60" y="30" width="6" height="22" rx="3" fill="#e8a838" transform="rotate(10 63 41)"/>
+  <rect x="110" y="40" width="6" height="20" rx="3" fill="#5ba4cf" transform="rotate(-20 113 50)"/>
+  <rect x="140" y="55" width="6" height="18" rx="3" fill="#5aab7a" transform="rotate(15 143 64)"/>
+  <rect x="85" y="70" width="6" height="20" rx="3" fill="#cf5b5b" transform="rotate(-8 88 80)"/>
+  <rect x="45" y="100" width="6" height="18" rx="3" fill="#5ba4cf" transform="rotate(20 48 109)"/>
+  <rect x="125" y="95" width="6" height="20" rx="3" fill="#7c5cbf" transform="rotate(-12 128 105)"/>
+  <rect x="75" y="120" width="6" height="18" rx="3" fill="#e8a838" transform="rotate(15 78 129)"/>
+  <rect x="105" y="130" width="6" height="16" rx="3" fill="#5aab7a" transform="rotate(-25 108 138)"/>
+  <!-- Dots -->
+  <circle cx="50" cy="75" r="4" fill="#e8a838"/>
+  <circle cx="130" cy="30" r="3.5" fill="#cf5b5b"/>
+  <circle cx="150" cy="120" r="4" fill="#e8a838"/>
+  <circle cx="25" cy="130" r="3" fill="#5aab7a"/>
+  <circle cx="90" cy="45" r="3.5" fill="#5ba4cf"/>
+  <circle cx="40" cy="150" r="3.5" fill="#7c5cbf"/>
+  <circle cx="145" cy="150" r="3" fill="#5ba4cf"/>
+  <circle cx="70" cy="155" r="3" fill="#cf5b5b"/>
+  <circle cx="115" cy="70" r="3" fill="#7c5cbf"/>
+</svg>
