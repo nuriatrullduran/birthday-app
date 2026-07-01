@@ -1442,7 +1442,7 @@
                 const d = new Date(f.date + 'T00:00:00');
                 const daysLeft = getDaysUntil(d.getMonth() + 1, d.getDate());
                 return { ...f, daysLeft };
-            }).sort((a, b) => a.daysLeft - b.daysLeft).slice(0, 5);
+            }).sort((a, b) => a.daysLeft - b.daysLeft).slice(0, 4);
 
             let html = '<div class="coming-up-title">Coming up</div>';
             html += sorted.map(f => {
